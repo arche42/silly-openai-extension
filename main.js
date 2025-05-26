@@ -1,29 +1,44 @@
-module.exports = {
-  id: 'openai',
-  name: 'OpenAI-compatible',
-  description: 'Connect to any OpenAI-style API endpoint (LM Studio, KoboldCpp, etc.)',
-
-  async setup() {
-    return {
-      call: async (prompt, context) => {
-        const response = await fetch('http://127.0.0.1:1234/v1/chat/completions', {
-          method: 'POST',
+export default {
+  async setup(app) {
+    app.registerAPI({
+      id: "openai",
+      name: "OpenAI-compatible",
+      settings: [
+        {
+          key: "baseURL",
+          name: "API URL",
+          type: "text",
+          default: "http://127.0.0.1:1234/v1"
+        },
+        {
+          key: "apiKey",
+          name: "API Key",
+          type: "text",
+          default: "natalya-key"
+        }
+      ],
+      async call(api, { prompt, system, stop, temperature, maxTokens }) {
+        const res = await fetch(`${api.baseURL}/chat/completions`, {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer natalya-key'
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${api.apiKey}`
           },
           body: JSON.stringify({
-            model: 'mythomax-12-13b',
+            model: "mythomax-12-13b",  // или другой
             messages: [
-              { role: 'system', content: '' },
-              { role: 'user', content: prompt }
-            ]
+              ...(system ? [{ role: "system", content: system }] : []),
+              { role: "user", content: prompt }
+            ],
+            temperature,
+            max_tokens: maxTokens,
+            stop
           })
         });
 
-        const result = await response.json();
-        return result.choices?.[0]?.message?.content || '[no response]';
+        const data = await res.json();
+        return data.choices?.[0]?.message?.content || "[Empty response]";
       }
-    };
+    });
   }
 };
