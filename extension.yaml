@@ -1,0 +1,10 @@
+id: openai
+name: OpenAI-compatible API
+version: 1.0.0
+entry: main.js
+description: Custom extension for SillyTavern to connect to OpenAI-compatible APIs like LM Studio or KoboldCpp.
+tags:
+  - api
+  - backend
+  - openai
+  - local
