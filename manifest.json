@@ -1,0 +1,9 @@
+{
+  "id": "openai",
+  "name": "OpenAI-compatible API",
+  "version": "1.0.0",
+  "entry": "main.js",
+  "description": "Connects SillyTavern to local OpenAI-style APIs like LM Studio or KoboldCpp.",
+  "authors": ["arche42"],
+  "tags": ["api", "backend", "openai", "local"]
+}
